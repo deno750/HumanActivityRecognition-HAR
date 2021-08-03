@@ -53,8 +53,8 @@ class CVAE(tf.keras.Model):
     self.encoder = tf.keras.models.Sequential(
         [
             layer.InputLayer(input_shape=(128, 6)),
-            layer.Conv1D(filters=256, kernel_size=3, strides=2, activation='relu', padding='same'),
-            layer.Conv1D(filters=126, kernel_size=3, strides=2, activation='relu', padding='same'),
+            layer.Conv1D(filters=256, kernel_size=7, strides=2, activation='relu', padding='same'),
+            layer.Conv1D(filters=126, kernel_size=5, strides=2, activation='relu', padding='same'),
             layer.Conv1D(filters=64, kernel_size=3, strides=2, activation='relu', padding='same'),
             layer.Conv1D(filters=32, kernel_size=3, strides=2, activation='relu', padding='same'),
             layer.Flatten(),
@@ -70,8 +70,8 @@ class CVAE(tf.keras.Model):
             layer.Reshape((8, 32)),
             layer.Conv1DTranspose(filters=64, kernel_size=3, strides=2, activation='relu', padding='same'),
             layer.Conv1DTranspose(filters=128, kernel_size=3, strides=2, activation='relu', padding='same'),
-            layer.Conv1DTranspose(filters=256, kernel_size=3, strides=2, activation='relu', padding='same'),
-            layer.Conv1DTranspose(filters=6, kernel_size=3, strides=2, padding='same'),
+            layer.Conv1DTranspose(filters=256, kernel_size=5, strides=2, activation='relu', padding='same'),
+            layer.Conv1DTranspose(filters=6, kernel_size=7, strides=2, padding='same'),
         ]
     )
 

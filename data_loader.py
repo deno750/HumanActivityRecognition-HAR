@@ -28,7 +28,7 @@ def __downloadDataset():
 
 
 
-def getDataset():
+def __getDataset():
     __downloadDataset()
     datasetV1 = loadmat('dataset/activity/ARS_DLR_DataSet.mat')
     datasetV2 = loadmat('dataset/activity/ARS_DLR_DataSet_V2.mat')
@@ -41,11 +41,6 @@ def getDataset():
     del datasetV1
     del datasetV2
     return dataset
-
-
-
-
-
 
 
 
@@ -104,3 +99,7 @@ def dataset_preparation(dataset):
             X_data.append(measure_set)
     del dataset_values
     return (np.array(X_data), labels)
+
+def get_data():
+    dataset = __getDataset()
+    return dataset_preparation(dataset)
