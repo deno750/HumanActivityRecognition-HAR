@@ -1,0 +1,6 @@
+.ipynb_checkpoints
+.vscode
+.DS_Store
+__pycache__
+Projects_2021.pdf
+dataset/activity
