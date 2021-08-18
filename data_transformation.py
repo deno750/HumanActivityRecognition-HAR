@@ -26,22 +26,8 @@ def add_dct_cols(input_data):
     del X_fft
     return X_data
 
-def data_augmentation(input_data, input_labels, transforms, for_labels = None, concatenate = False):
-    transformed_data = []
-    transformed_labels = []
-    for i in range(len(input_data)):#data, y in (input_data, input_labels):
-        data = input_data[i]
-        y = input_labels[i]
-        if for_labels is None or y in for_labels:
-            for trans in transforms:
-                transformed_data.append(trans(data))
-                transformed_labels.append(y)
-    if concatenate:
-        return np.concatenate([input_data, transformed_data], axis=0), np.concatenate([input_labels, transformed_labels], axis=0)
-    return np.array(transformed_data), np.array(transformed_labels)
-
 #Works
-def data_augmentation2(input_data, input_labels, transforms, for_labels = None, concatenate = False):
+def data_augmentation(input_data, input_labels, transforms, for_labels = None, concatenate = False):
     transformed_data = []
     transformed_labels = []
     for i in range(len(input_data)):#data, y in (input_data, input_labels):
@@ -51,12 +37,19 @@ def data_augmentation2(input_data, input_labels, transforms, for_labels = None, 
             transformed_data.append(data)
             transformed_labels.append(y)
     transformed_data = np.array(transformed_data)
-    data_tot = input_data.copy()
-    labels_tot = input_labels.copy()
+    data_tot = np.zeros(shape=input_data.shape)
+    labels_tot = np.zeros(shape=input_labels.shape)
+    index = 0
     for trans in transforms:
-        data_tot = np.concatenate([data_tot, trans(transformed_data)], axis=0)
-        labels_tot = np.concatenate([labels_tot, transformed_labels], axis=0)
-    
+        if index == 0:
+            data_tot = trans(transformed_data)
+            labels_tot = transformed_labels
+        else:
+            data_tot = np.concatenate([data_tot, trans(transformed_data)], axis=0)
+            labels_tot = np.concatenate([labels_tot, transformed_labels], axis=0)
+        index += 1
+    if concatenate:
+        return np.concatenate([input_data, data_tot], axis=0), np.concatenate([input_labels, labels_tot], axis=0)
     return np.array(data_tot), np.array(labels_tot)
 
 def data_normalizaion(input_data):
