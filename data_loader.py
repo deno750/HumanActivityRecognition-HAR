@@ -42,6 +42,13 @@ def __getDataset():
     del datasetV2
     return dataset
 
+def __getBenchmarkDataset():
+    dataset = loadmat('dataset/activity/ARS_DLR_Benchmark_Data_Set.mat')
+    del dataset['__header__']
+    del dataset['__version__']
+    del dataset['__globals__']
+    return dataset
+
 
 
 def dataset_preparation(dataset):
@@ -102,4 +109,8 @@ def dataset_preparation(dataset):
 
 def get_data():
     dataset = __getDataset()
+    return dataset_preparation(dataset)
+
+def get_benchmark_data():
+    dataset = __getBenchmarkDataset()
     return dataset_preparation(dataset)

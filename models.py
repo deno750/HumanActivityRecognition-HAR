@@ -32,7 +32,7 @@ class Decoder(Model):
     self.tconv1 = layer.Conv1DTranspose(filters=64, kernel_size=3, strides=2, activation='relu', padding='same')
     self.tconv2 = layer.Conv1DTranspose(filters=128, kernel_size=3, strides=2, activation='relu', padding='same')
     self.tconv3 = layer.Conv1DTranspose(filters=256, kernel_size=3, strides=2, activation='relu', padding='same')
-    self.tconv4 = layer.Conv1DTranspose(filters=6, kernel_size=3, strides=2, padding='same')
+    self.tconv4 = layer.Conv1DTranspose(filters=6, kernel_size=3, strides=2, activation='sigmoid', padding='same')
 
   def call(self, x):
     x = self.d1(x)
@@ -123,5 +123,20 @@ def ConvolutionalClassificationNN(num_labels):
           layer.Flatten(),
           layer.Dropout(0.4),
           layer.Dense(num_labels, activation='softmax'),
+        ]
+    )
+
+def RNNAutoEncoder(latent_space):
+    
+    return tf.keras.models.Sequential(
+        [
+          layer.LSTM(4, activation='relu', input_shape=(128, 6), return_sequences=True),
+          layer.LSTM(2, activation='relu', return_sequences=True),
+          layer.LSTM(6, activation='relu'),
+          layer.RepeatVector(128),
+          layer.LSTM(4, activation='relu', return_sequences=True),
+          layer.LSTM(2, activation='relu', return_sequences=True),
+          layer.TimeDistributed(layer.Dense(6))
+
         ]
     )

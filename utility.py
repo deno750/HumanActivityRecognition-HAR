@@ -3,6 +3,8 @@ import matplotlib as plt
 
 def plot_confusion_matrix(predictions, labels, target_names):
 
+  import matplotlib.cm
+
   '''
   ============================
   Internal function definition
