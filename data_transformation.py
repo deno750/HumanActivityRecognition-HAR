@@ -1,3 +1,4 @@
+from matplotlib.pyplot import axis
 import tensorflow as tf
 import numpy as np
 
@@ -52,19 +53,35 @@ def data_augmentation(input_data, input_labels, transforms, for_labels = None, c
         return np.concatenate([input_data, data_tot], axis=0), np.concatenate([input_labels, labels_tot], axis=0)
     return np.array(data_tot), np.array(labels_tot)
 
-def data_normalizaion(input_data):
-    normalization = tf.keras.layers.experimental.preprocessing.Normalization()
+def data_normalization(input_data):
+    normalization = tf.keras.layers.experimental.preprocessing.Normalization(mean=0, variance=1)
+    #normalization = tf.keras.layers.Normalization()
     tf.keras.utils.normalize(input_data)
     normalization.adapt(input_data)
     X_data = normalization(input_data)
     return np.array(X_data)
-    #X_norm = input_data.copy()
-    #for data in X_norm:
-    #    for i in range(data.shape[1]):
-    #        normed = data[:, i]
-    #        normed = (normed - normed.min()) / (normed.max() - normed.min())#(prova - np.min(prova)) / (np.max(prova) - np.min(prova))
-    #        data[:, i] = normed
-    #return X_norm
+    
+def min_max_scaler(input_data):
+    X_norm = input_data.copy()
+    for i in range(len(X_norm)):
+        data = X_norm[i]
+        min = data.min()
+        max = data.max()
+        data = (data - min) / (max - min)
+        X_norm[i] = data
+        #for i in range(data.shape[1]):
+        #    normed = data[:, i]
+        #    normed = (normed - normed.min()) / (normed.max() - normed.min())#(prova - np.min(prova)) / (np.max(prova) - np.min(prova))
+        #    data[:, i] = normed
+    return X_norm
+
+def min_max_scaler2(input_data):
+    from sklearn.preprocessing import minmax_scale
+    X_norm = input_data.reshape((input_data.shape[0], input_data.shape[1] * input_data.shape[2]))
+    X_norm = minmax_scale(X_norm, axis=1)
+    X_norm = X_norm.reshape((-1, input_data.shape[1], input_data.shape[2]))
+    return X_norm
+
 
 
 
